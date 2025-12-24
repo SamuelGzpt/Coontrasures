@@ -1,0 +1,73 @@
+:root {
+  --color-primary: #2ECC71; /* Green */
+  --color-secondary: #F1C40F; /* Yellow */
+  --color-bg: #FFFFFF; /* White */
+  --color-text: #2C3E50; /* Dark Blue-Gray */
+  --color-accent-light: #F0F9F4; /* Light Green Tint */
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --spacing-section: 4rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+
+.section {
+  padding: var(--spacing-section) 0;
+}
+
+/* GSAP Defaults */
+.gsap-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
