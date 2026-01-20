@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import ReportsPage from './pages/ReportsPage';
+import AdminReportsPage from './pages/AdminReportsPage';
 import './index.css';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/informes" element={<ReportsPage />} />
+          <Route path="/admin" element={<AdminReportsPage />} />
         </Routes>
       </Layout>
     </Router>

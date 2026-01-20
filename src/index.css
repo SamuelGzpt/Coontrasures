@@ -1,9 +1,14 @@
 :root {
-  --color-primary: #2ECC71; /* Green */
-  --color-secondary: #F1C40F; /* Yellow */
-  --color-bg: #FFFFFF; /* White */
-  --color-text: #2C3E50; /* Dark Blue-Gray */
-  --color-accent-light: #F0F9F4; /* Light Green Tint */
+  --color-primary: #2ECC71;
+  /* Green */
+  --color-secondary: #F1C40F;
+  /* Yellow */
+  --color-bg: #FFFFFF;
+  /* White */
+  --color-text: #2C3E50;
+  /* Dark Blue-Gray */
+  --color-accent-light: #F0F9F4;
+  /* Light Green Tint */
   --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --spacing-section: 4rem;
 }
@@ -19,7 +24,16 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
-  overflow-x: hidden;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
 }
 
 a {
@@ -31,7 +45,9 @@ ul {
   list-style: none;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 700;
   line-height: 1.2;
 }

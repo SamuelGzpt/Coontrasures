@@ -1,0 +1,87 @@
+# Guía de Despliegue en Servidor Propio (Coontrasures)
+
+Esta guía detalla paso a paso cómo configurar tu servidor Windows para alojar la aplicación Coontrasures, incluyendo la base de datos y el backend seguro para subir informes.
+
+## 1. Requisitos Previos
+
+Antes de empezar, necesitas instalar el siguiente software en tu servidor:
+
+1.  **Node.js (LTS)**: Descárgalo de [nodejs.org](https://nodejs.org/). Necesario para ejecutar el backend y la herramienta de construcción del frontend.
+2.  **PostgreSQL**: Descárgalo de [postgresql.org](https://www.postgresql.org/download/windows/). Es la base de datos segura.
+    *   Durante la instalación, te pedirá una contraseña para el usuario `postgres`. **¡Guárdala bien!**
+3.  **Git** (Opcional pero recomendado): Para bajar tu código fácilmente.
+
+---
+
+## 2. Configuración de la Base de Datos
+
+1.  Abre **pgAdmin 4** (se instala con PostgreSQL) o **DBeaver**.
+2.  Crea una nueva base de datos llamada `cootransures_db`.
+3.  Abre la herramienta de consultas (Query Tool) y ejecuta el script que preparé en [server/db/init.sql](file:///c:/Users/USUARIO/Desktop/Coontrasures/server/db/init.sql).
+    *   Este script crea la tabla `reports` donde se guardará la información de los archivos.
+
+---
+
+## 3. Preparación del Backend (Servidor Node.js)
+
+Como React es solo frontend, necesitas un pequeño servidor para manejar los archivos y conectar con la base de datos de forma segura.
+
+1.  En tu proyecto, crea una carpeta llamada `server`.
+2.  Dentro, crea un archivo `package.json` ejecutando `npm init -y` en la terminal dentro de esa carpeta.
+3.  Instala las librerías necesarias:
+    ```bash
+    npm install express pg multer cors dotenv
+    ```
+    *   **express**: El servidor web.
+    *   **pg**: Para conectar con PostgreSQL.
+    *   **multer**: Para manejar la subida de archivos PDF.
+    *   **cors**: Permite que tu frontend (React) hable con el backend.
+    *   **dotenv**: Para manejar contraseñas de forma segura.
+
+4.  Crea un archivo `server/index.js`. Aquí deberás escribir el código que recibe el archivo y lo guarda en una carpeta del disco (ej: `C:\cootransures_data\uploads`) y guarda la referencia en la base de datos.
+    *   *Nota: Cuando estemos listos para implementar esto, puedo generarte el código exacto de este archivo.*
+
+---
+
+## 4. Construcción del Frontend (React)
+
+Para poner la web en producción, no usas `npm run dev`. Debes construir la versión optimizada.
+
+1.  En la carpeta principal del proyecto (donde está `src`), ejecuta:
+    ```bash
+    npm run build
+    ```
+2.  Esto creará una carpeta `dist`.
+3.  El contenido de esta carpeta `dist` son los archivos reales de tu página web.
+
+---
+
+## 5. Puesta en Marcha (Production)
+
+Para que la aplicación corra 24/7 en tu servidor:
+
+1.  **Backend**:
+    *   Recomiendo instalar **PM2** (Process Manager 2):
+        ```bash
+        npm install -g pm2
+        ```
+    *   Inicia tu backend:
+        ```bash
+        pm2 start server/index.js --name "coontrasures-api"
+        ```
+
+2.  **Frontend**:
+    *   Puedes servir la carpeta `dist` usando el mismo backend de Node.js (configurando Express para servir archivos estáticos) o usar un servidor web como **IIS** (Internet Information Services) de Windows o **Nginx**.
+    *   Si usas el backend de Node para todo, es más sencillo. Solo agregas esto a tu `server/index.js`:
+        ```javascript
+        app.use(express.static('../dist'));
+        ```
+
+## Resumen de Seguridad
+*   **Archivos**: Los PDFs se guardan en el disco del servidor, no en la base de datos (buenas prácticas).
+*   **Base de Datos**: Está protegida por usuario y contraseña. Solo el backend tiene acceso.
+*   **Admin**: La ruta `/admin` pedirá contraseña. Puedes mejorar esto en el futuro con un sistema de usuarios real en la base de datos (tabla `users` incluida en el script SQL).
+
+---
+
+**Cuando tengas tu servidor listo, envíame este documento y te ayudaré a escribir el código final del `server/index.js` para conectar todas las piezas.**
