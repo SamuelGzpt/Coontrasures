@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './LandingPage.css';
 import { ChevronRight, Target, Eye, ShieldCheck, Bus, Briefcase, Package } from 'lucide-react';
 import PhotoSlider from '../components/PhotoSlider';
+import ServiceSlider from '../components/ServiceSlider';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -116,32 +117,7 @@ const LandingPage: React.FC = () => {
                         <p className="subtitle">Soluciones de transporte a tu medida</p>
                     </div>
 
-                    <div className="services-grid">
-                        <div className="service-card">
-                            <div className="service-icon">
-                                <Bus size={40} />
-                            </div>
-                            <h3>Transporte Intermunicipal</h3>
-                            <p>Conectamos municipios con frecuencias diarias y puntualidad garantizada.</p>
-                            <span className="service-link">Saber más <ChevronRight size={16} /></span>
-                        </div>
-                        <div className="service-card">
-                            <div className="service-icon">
-                                <Briefcase size={40} />
-                            </div>
-                            <h3>Servicio Especial</h3>
-                            <p>Transporte exclusivo para empresas, colegios y grupos de turismo.</p>
-                            <span className="service-link">Saber más <ChevronRight size={16} /></span>
-                        </div>
-                        <div className="service-card">
-                            <div className="service-icon">
-                                <Package size={40} />
-                            </div>
-                            <h3>Encomiendas</h3>
-                            <p>Envía tus paquetes y documentos con la seguridad que nos caracteriza.</p>
-                            <span className="service-link">Saber más <ChevronRight size={16} /></span>
-                        </div>
-                    </div>
+                    <ServiceSlider />
                 </div>
             </section>
 

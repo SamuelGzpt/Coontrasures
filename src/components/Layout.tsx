@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <main>{children}</main>
             <footer style={{ backgroundColor: '#2C3E50', color: 'white', padding: '2rem', textAlign: 'center', marginTop: 'auto' }}>
                 <div className="container">
-                    <p>© 2024 Cootransures. Todos los derechos reservados.</p>
+                    <p>© 2026 Cootransures. Todos los derechos reservados.</p>
                     <p>Transporte seguro y eficiente.</p>
                 </div>
             </footer>

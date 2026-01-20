@@ -56,18 +56,40 @@ const PhotoSlider: React.FC = () => {
         }
     }, []);
 
-    // 8 items to ensure full width coverage
-    const placeholderItems = Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="photo-item" />
-    ));
+    // Load logo
+    const logoUrl = new URL('../assets/slider/LOGO_final.png', import.meta.url).href;
+
+    // Load all jpeg images from the slider folder
+    const imagesGlob = import.meta.glob('../assets/slider/*.jpeg', { eager: true, as: 'url' });
+    const imageUrls = Object.values(imagesGlob);
+
+    // Prepare rows
+    // Top: 4 images + Logo
+    const topRowItems = [...imageUrls.slice(0, 4), logoUrl];
+
+    // Bottom: Logo + 4 images (taking the ones not used in top if possible, or just the next 4)
+    // If there are exactly 8 images, we take 4..8.
+    const bottomRowItems = [logoUrl, ...imageUrls.slice(4, 8)];
+
+    const renderItems = (items: string[]) => items.map((src, i) => {
+        const isLogo = src.includes('LOGO'); // Matches LOGO_v3.png, LOGO.png etc.
+        return (
+            <img
+                key={i}
+                src={src}
+                alt={isLogo ? "Cootransures Logo" : `Slide ${i}`}
+                className={`photo-item ${isLogo ? 'photo-logo' : ''}`}
+            />
+        );
+    });
 
     return (
         <section className="photo-slider">
             <div className="row top-row" ref={topRowRef}>
-                {placeholderItems}
+                {renderItems(topRowItems)}
             </div>
             <div className="row bottom-row" ref={bottomRowRef}>
-                {placeholderItems}
+                {renderItems(bottomRowItems)}
             </div>
         </section>
     );
