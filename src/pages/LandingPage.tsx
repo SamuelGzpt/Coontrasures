@@ -46,7 +46,7 @@ const LandingPage: React.FC = () => {
     return (
         <div className="landing-page">
             {/* Hero Section */}
-            <section ref={heroRef} className="hero">
+            <section id="inicio" ref={heroRef} className="hero">
                 <div className="hero-overlay"></div>
                 <div className="container hero-content">
                     <h1>Viaja Seguro con <span className="highlight">Cootransures</span></h1>

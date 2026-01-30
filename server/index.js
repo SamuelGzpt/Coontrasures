@@ -9,26 +9,50 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const API_SECRET = process.env.JWT_SECRET || 'mock-token-secure';
 
 // --- Security Middleware ---
 
 // Helmet sets various HTTP headers for security
 app.use(helmet());
 
-// CORS configuration (Adjust origin for production)
+// CORS configuration
 app.use(cors({
-    origin: '*', // CHANGE THIS IN PRODUCTION to your actual domain
+    origin: CLIENT_URL,
     methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Rate Limiting: Prevent brute-force and DoS
-const limiter = rateLimit({
+// Global Rate Limiting: Prevent brute-force and DoS
+const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per windowMs
     message: 'Too many requests from this IP, please try again later.'
 });
-app.use(limiter);
+app.use(globalLimiter);
+
+// Specific Login Rate Limiter (Stricter)
+const loginLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5, // Limit each IP to 5 login attempts per hour
+    message: 'Too many login attempts, please try again later.'
+});
+
+// Auth Middleware
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+    if (!token) return res.status(401).json({ message: 'Access Denied: No Token Provided' });
+
+    // In a real app, verify JWT signature here
+    if (token !== API_SECRET) {
+        return res.status(403).json({ message: 'Access Denied: Invalid Token' });
+    }
+
+    next();
+};
 
 // Parse JSON bodies
 app.use(express.json());
@@ -65,12 +89,11 @@ const upload = multer({
     }
 });
 
-// Serve uploaded files statically (Secure this if files shouldn't be public!)
-// For public reports, this is fine.
+// Serve uploaded files statically
+// Note: In a high security app, you might want to authenticate this route too
 app.use('/uploads', express.static(uploadDir));
 
 // --- Mock Database (In-Memory) for now ---
-// Replace this with PostgreSQL query code when DB is ready
 let reports = [
     // Example: { id: '1', name: 'Informe 2024.pdf', date: '2024-01-20', url: '/uploads/example.pdf' }
 ];
@@ -82,19 +105,20 @@ app.get('/api/reports', (req, res) => {
     res.json(reports);
 });
 
-// POST /api/login: Simple Admin Check
-app.post('/api/login', (req, res) => {
+// POST /api/login: Admin Check with Strict Rate Limit
+app.post('/api/login', loginLimiter, (req, res) => {
     const { password } = req.body;
-    // STRONG RECOMMENDATION: Use environment variable for password or DB hash
+
+    // Check against env variable
     if (password === (process.env.ADMIN_PASSWORD || 'admin123')) {
-        res.json({ success: true, token: 'mock-token-secure' });
+        res.json({ success: true, token: API_SECRET });
     } else {
         res.status(401).json({ success: false, message: 'Invalid password' });
     }
 });
 
 // POST /api/reports: Protected Upload
-app.post('/api/reports', upload.single('report'), (req, res) => {
+app.post('/api/reports', authenticateToken, upload.single('report'), (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded or invalid file type.');
@@ -105,7 +129,7 @@ app.post('/api/reports', upload.single('report'), (req, res) => {
             name: req.file.originalname,
             date: new Date().toLocaleDateString(),
             // URL to access the file
-            url: `http://localhost:${PORT}/uploads/${req.file.filename}`
+            url: `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
         };
 
         reports.unshift(newReport);
@@ -116,7 +140,7 @@ app.post('/api/reports', upload.single('report'), (req, res) => {
 });
 
 // DELETE /api/reports/:id: Protected
-app.delete('/api/reports/:id', (req, res) => {
+app.delete('/api/reports/:id', authenticateToken, (req, res) => {
     const { id } = req.params;
     const reportIndex = reports.findIndex(r => r.id === id);
 
@@ -127,7 +151,11 @@ app.delete('/api/reports/:id', (req, res) => {
         const filePath = path.join(uploadDir, filename);
 
         if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
+            try {
+                fs.unlinkSync(filePath);
+            } catch (err) {
+                console.error('Error deleting file:', err);
+            }
         }
 
         reports.splice(reportIndex, 1);
@@ -140,4 +168,5 @@ app.delete('/api/reports/:id', (req, res) => {
 // Start Server
 app.listen(PORT, () => {
     console.log(`Server running secure on port ${PORT}`);
+    console.log(`Allowed Client URL: ${CLIENT_URL}`);
 });

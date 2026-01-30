@@ -6,14 +6,14 @@ const Navbar: React.FC = () => {
     return (
         <nav className="navbar">
             <div className="container navbar-content">
-                <Link to="/" className="logo">
+                <a href="#inicio" className="logo">
                     <span className="logo-text">COOTRANSURES</span>
-                </Link>
+                </a>
 
                 <ul className="nav-links">
-                    <li><Link to="/">Inicio</Link></li>
-                    <li><Link to="/#quienes-somos">Quiénes Somos</Link></li>
-                    <li><Link to="/#servicios">Servicios</Link></li>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
                     <li><Link to="/informes">Informes</Link></li>
                     <li><a href="#contactanos" className="btn-contact">Contáctanos</a></li>
                 </ul>

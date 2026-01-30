@@ -1,5 +1,5 @@
 :root {
-  --color-primary: #2ECC71;
+  --color-primary: #046A41;
   /* Green */
   --color-secondary: #F1C40F;
   /* Yellow */
@@ -9,7 +9,11 @@
   /* Dark Blue-Gray */
   --color-accent-light: #F0F9F4;
   /* Light Green Tint */
-  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-main: 'Segoe UI',
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
   --spacing-section: 4rem;
 }
 
