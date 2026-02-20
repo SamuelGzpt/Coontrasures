@@ -104,13 +104,11 @@ const LandingPage: React.FC = () => {
                         </div>
                     </div>
 
-                    <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'left' }}>
+                    <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                         <a href="/docs/Politicas_SARLAFT.pdf" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <FileText size={20} />
                             Politicas SARLAFT
                         </a>
-                    </div>
-                    <div style={{ marginTop: '3rem', display: 'flex', justifyContent: 'center' }}>
                         <a href="/docs/Politicas_Coontransures.pdf" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <FileText size={20} />
                             Politicas Coontransures
