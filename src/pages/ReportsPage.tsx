@@ -42,7 +42,7 @@ const ReportsPage: React.FC = () => {
                                         </td>
                                         <td>{report.date}</td>
                                         <td style={{ textAlign: 'right' }}>
-                                            <a href={report.url} className="btn-download" onClick={(e) => e.preventDefault()}>
+                                            <a href={report.url} className="btn-download" target="_blank" rel="noopener noreferrer">
                                                 Descargar PDF
                                             </a>
                                         </td>
